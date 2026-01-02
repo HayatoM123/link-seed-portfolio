@@ -45,7 +45,7 @@ export function getAllPosts(): Post[] {
 }
 
 export async function getPostBySlug(slug: string) {
-  const fullPath = path.join(POSTS_DIR, ${slug}.mdx);
+  const fullPath = path.join(POSTS_DIR, `${slug}.mdx`);
   const raw = fs.readFileSync(fullPath, "utf-8");
   const { content, data } = matter(raw);
   const frontmatter = data as PostFrontmatter;

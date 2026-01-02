@@ -3,12 +3,22 @@ import { ContactForm } from "@/components/ContactForm";
 import { site } from "@/content/site";
 
 export default function ContactPage() {
+  const subject = encodeURIComponent("【LINK SEED】お問い合わせ");
+  const body = encodeURIComponent("お名前：\nご相談内容：\n");
+  const mailto = `mailto:${site.contactEmail}?subject=${subject}&body=${body}`;
+
   return (
     <Container className="space-y-8">
       <h1 className="text-2xl font-semibold">Contact</h1>
       <p className="text-zinc-700 leading-7 max-w-2xl">
         相談内容が固まっていなくても大丈夫です。現状と目的を共有いただければ、進め方を整理して提案します。
       </p>
+      <a
+        href={mailto}
+        className="inline-flex items-center justify-center rounded-full border border-zinc-300 px-5 py-2.5 text-sm hover:bg-zinc-50 transition-colors"
+      >
+        メールで相談する
+      </a>
 
       <div className="grid gap-6 rounded-2xl border border-zinc-200 p-6 md:grid-cols-2">
         <div className="space-y-2 text-sm text-zinc-700">

@@ -17,7 +17,7 @@ export default function BlogPage() {
         {posts.map((p) => (
           <Link
             key={p.slug}
-            href={/blog/}
+            href={`/blog/${p.slug}`}
             className="rounded-2xl border border-zinc-200 p-6 hover:bg-zinc-50"
           >
             <div className="text-sm text-zinc-500">{p.date}</div>
