@@ -6,14 +6,14 @@ export const site = {
   description:
     "業務自動化（VBA/RPA/Power Automate/Python）と機械設計を軸に、現場の繰り返し作業を標準化して仕組み化します。関東・オンライン対応。",
   location: "関東 / オンライン",
-  pricing: "要相談（目安：1,500円/時〜）",
+  pricing: "要相談（内容によりお見積り）",
   contactEmail: "hayatoevent123@gmail.com", // 後で差し替え
   nav: [
-    { href: "/", label: "Home" },
-    { href: "/about", label: "About" },
-    { href: "/projects", label: "Projects" },
-    { href: "/services", label: "Services" },
-    { href: "/blog", label: "Blog" },
-    { href: "/contact", label: "Contact" },
+    { href: "/", label: "トップ" },
+    { href: "/about", label: "プロフィール" },
+    { href: "/projects", label: "実績" },
+    { href: "/services", label: "できること" },
+    { href: "/blog", label: "ブログ" },
+    { href: "/contact", label: "お問い合わせ" },
   ],
 };

@@ -4,12 +4,14 @@ import { site } from "@/content/site";
 
 export default function ContactPage() {
   const subject = encodeURIComponent("【LINK SEED】お問い合わせ");
-  const body = encodeURIComponent("お名前：\nご相談内容：\n");
+  const body = encodeURIComponent(
+    "お名前：\n目的（何ができるようになりたいか）：\n現状（今の手順/ツール）：\n頻度（毎日/週次/月次）：\n例外（イレギュラー）：\n期限（いつまでに）：\n共有可能な資料（画面/サンプル/Excel）：\n"
+  );  
   const mailto = `mailto:${site.contactEmail}?subject=${subject}&body=${body}`;
 
   return (
     <Container className="space-y-8">
-      <h1 className="text-2xl font-semibold">Contact</h1>
+      <h1 className="text-2xl font-semibold">お問い合わせ</h1>
       <p className="text-zinc-700 leading-7 max-w-2xl">
         相談内容が固まっていなくても大丈夫です。現状と目的を共有いただければ、進め方を整理して提案します。
       </p>
@@ -26,9 +28,6 @@ export default function ContactPage() {
           <div>{site.nameJa} / {site.nameEn}</div>
           <div className="text-zinc-600">対応：{site.location}</div>
           <div className="text-zinc-600">価格：{site.pricing}</div>
-          <div className="text-zinc-500">
-            ※メール直送にしたい場合は site.ts の contactEmail を差し替えてください。
-          </div>
         </div>
         <ContactForm />
       </div>

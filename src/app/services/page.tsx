@@ -4,7 +4,7 @@ import { services } from "@/content/services";
 export default function ServicesPage() {
   return (
     <Container className="space-y-8">
-      <h1 className="text-2xl font-semibold">Services</h1>
+      <h1 className="text-2xl font-semibold">できること</h1>
 
       <div className="grid gap-5">
         {services.map((s) => (

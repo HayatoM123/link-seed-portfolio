@@ -8,7 +8,7 @@ export default function BlogPage() {
 
   return (
     <Container className="space-y-8">
-      <h1 className="text-2xl font-semibold">Blog</h1>
+      <h1 className="text-2xl font-semibold">ブログ</h1>
       <p className="text-zinc-700 leading-7 max-w-2xl">
         技術メモと日記寄りの記録です。自動化の考え方、作業の型、気づきなどを書きます。
       </p>

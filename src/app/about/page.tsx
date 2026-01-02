@@ -4,7 +4,7 @@ import { site } from "@/content/site";
 export default function AboutPage() {
   return (
     <Container className="space-y-10">
-      <h1 className="text-2xl font-semibold">About</h1>
+      <h1 className="text-2xl font-semibold">プロフィール</h1>
 
       <section className="space-y-3">
         <p className="text-zinc-700 leading-7">
