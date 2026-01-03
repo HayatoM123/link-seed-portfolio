@@ -14,7 +14,13 @@ export default function BlogPage() {
       </p>
 
       <div className="grid gap-4">
-        {posts.map((p) => (
+        {posts.length === 0 ? (
+          <div className="rounded-2xl border border-zinc-200 p-6 text-sm text-zinc-600">
+            {/* TODO: 文言は好きに変えてOK */}
+            まだ記事がありません（準備中）
+          </div>
+        ) : (
+          posts.map((p) => (
           <Link
             key={p.slug}
             href={`/blog/${p.slug}`}
