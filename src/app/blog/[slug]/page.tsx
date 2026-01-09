@@ -8,11 +8,13 @@ export async function generateStaticParams() {
   return getAllPosts().map((p) => ({ slug: p.slug }));
 }
 
+// ✅ Next.js 16/Turbopack 対応：params が Promise の場合があるため await してから使う
 export async function generateMetadata(
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   try {
-    const post = await getPostBySlug(params.slug);
+    const { slug } = await params; // ←ここがポイント
+    const post = await getPostBySlug(slug);
     return {
       title: post.frontmatter.title,
       description: post.frontmatter.description,
@@ -22,9 +24,13 @@ export async function generateMetadata(
   }
 }
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+// ✅ Next.js 16/Turbopack 対応：params を await してから slug を取り出す
+export default async function BlogPostPage(
+  { params }: { params: Promise<{ slug: string }> }
+) {
   try {
-    const { frontmatter, content } = await getPostBySlug(params.slug);
+    const { slug } = await params; // ←ここがポイント
+    const { frontmatter, content } = await getPostBySlug(slug);
 
     return (
       <Container className="space-y-6">

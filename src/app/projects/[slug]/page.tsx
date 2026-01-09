@@ -15,8 +15,15 @@ export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const p = projects.find((x) => x.slug === params.slug);
+/**
+ * ✅ Next.js 16/Turbopack 対応
+ * params が Promise として渡ってくる場合があるため await してから使う
+ */
+export async function generateMetadata(
+  { params }: { params: Promise<{ slug: string }> }
+): Promise<Metadata> {
+  const { slug } = await params; // ← unwrap（箱を開ける）
+  const p = projects.find((x) => x.slug === slug);
   if (!p) return {};
   return {
     title: `${p.title} | 実績`,
@@ -24,22 +31,24 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   };
 }
 
-export default function ProjectDetailPage({ params }: { params: { slug: string } }) {
-  const p = projects.find((x) => x.slug === params.slug);
+/**
+ * ✅ Next.js 16/Turbopack 対応
+ * async にして params を await してから参照する
+ */
+export default async function ProjectDetailPage(
+  { params }: { params: Promise<{ slug: string }> }
+) {
+  const { slug } = await params; // ← unwrap
+  const p = projects.find((x) => x.slug === slug);
   if (!p) notFound();
 
   return (
     <Container className="space-y-10">
-      {/* =========================
-         ✅ ここは“結論サマリ”の場所
-         TODO: 文言を変えたければ `src/content/projects.ts` の p.detail.overview を編集
-         ========================= */}
       <header className="space-y-3">
         <div className="text-sm text-zinc-500">{CATEGORY_LABEL[p.category]}</div>
         <h1 className="text-2xl font-semibold">{p.title}</h1>
         <p className="max-w-2xl text-zinc-700 leading-7">{p.detail.overview}</p>
 
-        {/* ✅ 案件情報（ここは見積・相談の判断材料になるので強い） */}
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <InfoCard title="役割" value={p.detail.role} />
           <InfoCard title="期間" value={p.detail.period} />
@@ -48,16 +57,11 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
         </div>
       </header>
 
-      {/* =========================
-         ✅ 課題：ここを読むと「自分の会社も同じだ」と刺さる
-         TODO: `src/content/projects.ts` の p.problem を編集
-         ========================= */}
       <section className="rounded-2xl border border-zinc-200 p-6 space-y-2">
         <div className="text-sm font-medium">課題</div>
         <p className="text-sm text-zinc-700 leading-7">{p.problem}</p>
       </section>
 
-      {/* ✅ アプローチ（どう進める人かが分かる） */}
       <section className="rounded-2xl border border-zinc-200 p-6 space-y-2">
         <div className="text-sm font-medium">アプローチ</div>
         <ul className="list-disc pl-5 text-sm text-zinc-700 space-y-1">
@@ -67,29 +71,24 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
         </ul>
       </section>
 
-      {/* ✅ 対象範囲（“何をやってくれるか”が具体化される） */}
       <section className="rounded-2xl border border-zinc-200 p-6 space-y-2">
         <div className="text-sm font-medium">対象範囲</div>
         <ul className="list-disc pl-5 text-sm text-zinc-700 space-y-1">
-          {/* TODO: 内容は `src/content/projects.ts` の p.detail.scope を編集 */}
           {p.detail.scope.map((x) => (
             <li key={x}>{x}</li>
           ))}
         </ul>
       </section>
 
-      {/* ✅ 納品物（相手が手にする成果物を明確に） */}
       <section className="rounded-2xl border border-zinc-200 p-6 space-y-2">
         <div className="text-sm font-medium">納品物</div>
         <ul className="list-disc pl-5 text-sm text-zinc-700 space-y-1">
-          {/* TODO: 内容は `src/content/projects.ts` の p.detail.deliverables を編集 */}
           {p.detail.deliverables.map((x) => (
             <li key={x}>{x}</li>
           ))}
         </ul>
       </section>
 
-      {/* ✅ 制約（任意）：現実感が出て信頼が上がる */}
       {p.detail.constraints?.length ? (
         <section className="rounded-2xl border border-zinc-200 p-6 space-y-2">
           <div className="text-sm font-medium">制約・前提</div>
@@ -101,11 +100,8 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
         </section>
       ) : null}
 
-      {/* ✅ 実装ポイント（工夫が“見える”） */}
       <section className="space-y-3">
         <div className="text-sm font-medium">実装ポイント</div>
-
-        {/* TODO: 内容は `src/content/projects.ts` の p.detail.implementationPoints を編集 */}
         <div className="space-y-4">
           {p.detail.implementationPoints.map((pt) => (
             <div key={pt.title} className="rounded-2xl border border-zinc-200 p-6">
@@ -120,7 +116,6 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
         </div>
       </section>
 
-      {/* ✅ 成果（あなたのサイトの強みなので残す） */}
       <section className="rounded-2xl border border-zinc-200 p-6 space-y-2">
         <div className="text-sm font-medium">成果</div>
         <ul className="list-disc pl-5 text-sm text-zinc-700 space-y-1">
@@ -130,12 +125,10 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
         </ul>
       </section>
 
-      {/* ✅ 学び / 次の改善（思考の再現性を見せる） */}
       <section className="grid gap-4 lg:grid-cols-2">
         <div className="rounded-2xl border border-zinc-200 p-6 space-y-2">
           <div className="text-sm font-medium">学び</div>
           <ul className="list-disc pl-5 text-sm text-zinc-700 space-y-1">
-            {/* TODO: `src/content/projects.ts` の p.detail.learnings を編集 */}
             {p.detail.learnings.map((x) => (
               <li key={x}>{x}</li>
             ))}
@@ -144,7 +137,6 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
         <div className="rounded-2xl border border-zinc-200 p-6 space-y-2">
           <div className="text-sm font-medium">次の改善</div>
           <ul className="list-disc pl-5 text-sm text-zinc-700 space-y-1">
-            {/* TODO: `src/content/projects.ts` の p.detail.nextSteps を編集 */}
             {p.detail.nextSteps.map((x) => (
               <li key={x}>{x}</li>
             ))}
@@ -152,17 +144,22 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
         </div>
       </section>
 
-      {/* ✅ CTA */}
       <section className="rounded-2xl border border-zinc-200 p-6">
         <div className="font-medium">同じ状況なら、こう進めます</div>
         <p className="mt-2 text-sm text-zinc-700 leading-7">
           現状（手順/頻度/例外）と目的を共有いただければ、優先順位→試作→運用の順で最短ルートを提案します。
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
-          <Link href="/contact" className="rounded-full bg-zinc-900 px-5 py-2.5 text-sm text-white hover:bg-zinc-800">
+          <Link
+            href="/contact"
+            className="rounded-full bg-zinc-900 px-5 py-2.5 text-sm text-white hover:bg-zinc-800"
+          >
             お問い合わせ
           </Link>
-          <Link href="/projects" className="rounded-full border border-zinc-300 px-5 py-2.5 text-sm hover:bg-zinc-50">
+          <Link
+            href="/projects"
+            className="rounded-full border border-zinc-300 px-5 py-2.5 text-sm hover:bg-zinc-50"
+          >
             実績一覧へ戻る
           </Link>
         </div>
